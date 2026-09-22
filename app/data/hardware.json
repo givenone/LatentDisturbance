@@ -1,0 +1,72 @@
+{
+    "tape_results":
+    {
+        "total": 30,
+        "black_tape": {
+            "nofilter": 3,
+            "nominal": 12,
+            "robust": 26
+        },
+        "no_tape": {
+            "nofilter": 11,
+            "nominal": 20,
+            "robust": 28
+        },
+        "transparent_tape": {
+            "nofilter": 5,
+            "nominal": 9,
+            "robust": 22
+        },
+        "all_safe": {
+            "nofilter": 3,
+            "nominal": 5,
+            "robust": 20
+        }
+    },
+    "tape_results_safe":
+    {
+        "total": 20,
+        "black_tape": {
+            "nofilter": 10,
+            "nominal": 16,
+            "robust": 18
+        },
+        "no_tape": {
+            "nofilter": 15,
+            "nominal": 18,
+            "robust": 19
+        },
+        "transparent_tape": {
+            "nofilter": 9,
+            "nominal": 9,
+            "robust": 17
+        },
+        "all_safe": {
+            "nofilter": 7,
+            "nominal": 9,
+            "robust": 16
+        }
+    },
+    "Policy Results": {
+        "total": 20,
+        "diffusion policy": {
+            "nofilter": 2,
+            "nominal": 10,
+            "robust": 15
+        },
+        "openpi": {
+            "nofilter": 8,
+            "nominal": 9,
+            "robust": 14
+        }
+    },
+    "Steering Results": {
+        "total": 20,
+        "openpi": {
+            "baseline": 8,
+            "nominal imagination": 7,
+            "adversarial imagination": 14,
+            "adversarial imagination (w.o. OOD)": 6
+        }
+    }
+}
