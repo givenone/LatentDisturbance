@@ -152,3 +152,4 @@ html{overflow-x:hidden}body{overflow-x:clip}
 .takeaway-list{margin:0 0 8px;padding-left:20px;font-size:.87rem;color:#444;line-height:1.75}.takeaway-list li+li{margin-top:4px}.takeaway-list strong{color:var(--ink)}
 @media(max-width:560px){.section-toc ol{columns:1}.takeaway-list{font-size:.82rem}}
 .takeaway-list{list-style:disc}.section-toc ol{list-style:decimal}
+.paper-player-screen{position:relative}.player-disabled-overlay{position:absolute;inset:0;background:rgba(120,120,120,.45);pointer-events:none}
