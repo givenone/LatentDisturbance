@@ -10,7 +10,7 @@ export const metadata = {
  keywords: ['world models','robust optimization','latent disturbance','latent safety filter','policy steering','robot learning','uncertainty set','conformal prediction','safe robot manipulation'],
  resources: [{label:'arXiv',href:null},{label:'Code',href:null}] as {label:string;href:string|null}[],
  affiliations: 'Carnegie Mellon University',
- intro: 'Robust decision-making in world models, with latent-space disturbances modeled as perturbations to the learned latent dynamics that induce pessimistic yet plausible imaginations.',
+ intro: 'Robust decision-making in the latent space of world models, by modeling latent-space disturbances that induce pessimistic yet plausible latent dynamics.',
  takeaways: [
   {tag:'Method',text:'Latent disturbances perturb the learned dynamics within a <strong>calibrated uncertainty set</strong> of plausible transitions, solved via <strong>efficient game-theoretic optimization</strong>.'},
   {tag:'Robust Runtime Policy Steering',text:'<strong>54%→15% failure rate</strong> with a robust latent safety filter and <strong>35%→70% success rate</strong> with sample-and-verify in contact-rich manipulation.'},
