@@ -1,3 +1,4 @@
+import hardwareImaginations from './hardware-imaginations.json';
 // Prefix for files in public/, so the site also works when served from a sub-path (GitHub Pages).
 export const asset=(path:string)=>`${process.env.NEXT_PUBLIC_BASE_PATH??''}${path}`;
 export const metadata = {
@@ -38,6 +39,11 @@ const actionFolder=(action:number)=>asset(`/front_figure/${action}_${actions[act
 export const demo = { initial:asset('/front_figure/initial.png'), original:(action:number)=>`${actionFolder(action)}/current.mp4`, video:(action:number,outcome:Outcome)=>`${actionFolder(action)}/${outcome==='ours'?'pessimistic':outcome}.mp4` };
 export const trajectoryRoots={robust:asset('/filtering_results/robust'),nominal:asset('/filtering_results/nominal'),simulation:asset('/sim_results/final_qualitative_results')};
 export const experimentMedia={
+  hardwareImagination:hardwareImaginations.map((item,i)=>({
+    ...item,title:`Example ${i+1}`,cameraLayout:'side-by-side' as const,
+    left:{src:asset(item.nominal),label:'Nominal imagination'},
+    right:{src:asset(item.pessimistic),label:'Pessimistic imagination'},
+  })),
   stochasticity:asset('/sim_results/processed/task_intro.mp4'),
   ood:{title:'Imagination using latent disturbance optimized without in-distribution constraints',fps:30,nSteps:93,left:{src:asset('/sim_results/processed/ood/real_1.mp4'),label:'Executed in simulation'},right:{src:asset('/sim_results/processed/ood/ood_1.mp4'),label:'OOD imagination'}},
   imagination:[1,2].map(i=>({title:`Imagination ${i}`,fps:30,nSteps:i===1?518:411,left:{src:asset(`/sim_results/processed/imagination/nominal_${i}.mp4`),label:'Nominal imagination'},right:{src:asset(`/sim_results/processed/imagination/pessimistic_${i}.mp4`),label:'Pessimistic imagination'}})),

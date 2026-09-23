@@ -153,3 +153,37 @@ html{overflow-x:hidden}body{overflow-x:clip}
 @media(max-width:560px){.section-toc ol{columns:1}.takeaway-list{font-size:.82rem}}
 .takeaway-list{list-style:disc}.section-toc ol{list-style:decimal}
 .paper-player-screen{position:relative}.player-disabled-overlay{position:absolute;inset:0;background:rgba(120,120,120,.45);pointer-events:none}
+.imagination-toolbar{border:1px solid var(--line);border-radius:10px;margin-bottom:14px}
+.landscape-imagination{max-width:none}
+.landscape-imagination>h4{display:none}
+.landscape-imagination .comparison-videos .camera-pair{max-width:none}
+.landscape-imagination .comparison-videos .camera-pair video{max-height:none;aspect-ratio:8/3}
+.landscape-imagination .comparison-videos .synced-panels{padding:12px 0;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.camera-layout-side-by-side .camera-legend.camera-second{top:7px;left:calc(50% + 7px)}
+@media(max-width:600px){
+ .landscape-imagination .comparison-videos .synced-panels{grid-template-columns:minmax(0,1fr)}
+ .landscape-imagination .camera-legend{font-size:.62rem;top:7px;left:7px}
+}
+
+/* Runtime steering: complementary rules, side by side on desktop. */
+.runtime-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.runtime-card{min-width:0;border:1px solid var(--line);border-radius:10px;padding:24px;display:flex;flex-direction:column}
+.runtime-card h3{font-size:1.1rem;margin:0 0 12px}
+.runtime-card>p{font-size:.88rem;line-height:1.7;margin:0;color:var(--muted)}
+.runtime-card .runtime-equation{margin:20px 0;padding:14px 8px;font-size:.83rem;display:grid;align-items:center;flex:1}
+.runtime-card .runtime-note{font-size:.8rem;color:var(--dim)}
+@media(max-width:800px){.runtime-cards{grid-template-columns:minmax(0,1fr)}.runtime-card{padding:20px}.runtime-card .runtime-equation .katex-display,.runtime-card .runtime-equation .katex-display>.katex{text-align:center}}
+@media(max-width:400px){.runtime-card{padding:16px}.runtime-card .runtime-equation{font-size:.7rem}}
+
+/* Give filtering footage its full width on phones, with its native ratio. */
+.with-plots .camera-view video{width:100%;height:auto;aspect-ratio:auto 4/3}
+@media(max-width:600px){
+ .with-plots .synced-panels{grid-template-columns:minmax(0,1fr);gap:22px}
+ .with-plots .camera-pair,.with-plots .single .camera-pair{grid-template-columns:minmax(0,1fr)}
+ .with-plots .camera-view+.camera-view{border-top:2px solid #fff}
+ .with-plots .camera-legend{font-size:.65rem;padding:3px 7px;top:7px;left:7px}
+ .with-plots .filter-badge{font-size:.68rem;padding:5px 8px}
+ .with-plots .value-plot{height:190px}
+ .with-plots .timeline-controls>button,.with-plots .playback-speed{min-height:40px}
+}
+.copyright{margin-top:10px;font-size:.75rem;color:var(--dim)}

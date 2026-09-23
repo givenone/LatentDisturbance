@@ -5,8 +5,24 @@ import {readFileSync} from 'node:fs';
 import {spawnSync} from 'node:child_process';
 import {wilson} from '../app/data/statistics.ts';
 import {simulation} from '../app/data/simulation.ts';
-import {actions,outcomes,demo} from '../app/data/content.ts';
+import {actions,outcomes,demo,experimentMedia} from '../app/data/content.ts';
 const source = new URL('../../egg/0814_hardware_results/figures/',import.meta.url);
+test('real-world imagination files match their shared timeline and preserve each full source clip',()=>{
+ assert.equal(experimentMedia.hardwareImagination.length,10);
+ for(const example of experimentMedia.hardwareImagination){
+  for(const [mode,side] of [['nominal',example.left],['pessimistic',example.right]]){
+   const readVideo=path=>{
+    const result=spawnSync('ffprobe',['-v','error','-select_streams','v:0','-show_entries','stream=avg_frame_rate,nb_frames','-of','json',path],{encoding:'utf8'});
+    assert.equal(result.status,0,result.stderr);return JSON.parse(result.stdout).streams[0];
+   };
+   const output=readVideo(fileURLToPath(new URL('../public'+side.src,import.meta.url)));
+   const original=readVideo(fileURLToPath(new URL(`../more_results/${example.id}/${mode}.mp4`,import.meta.url)));
+   const [a,b]=output.avg_frame_rate.split('/').map(Number);
+   assert.equal(a/b,example.fps);assert.equal(Number(output.nb_frames),example.nSteps);
+   assert.ok(Number(output.nb_frames)>=Number(original.nb_frames),'no source frames are truncated');
+  }
+ }
+});
 test('hardware data exactly matches source counts',()=>{
  assert.deepEqual(JSON.parse(readFileSync(new URL('../app/data/hardware.json',import.meta.url))),JSON.parse(readFileSync(new URL('results.json',source))));
 });

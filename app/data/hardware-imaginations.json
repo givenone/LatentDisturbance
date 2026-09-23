@@ -1,0 +1,82 @@
+[
+  {
+    "id": "11",
+    "fps": 10.0,
+    "nSteps": 21,
+    "nominal": "/more_results/11/nominal.mp4",
+    "pessimistic": "/more_results/11/pessimistic.mp4",
+    "holdsFinalFrame": false
+  },
+  {
+    "id": "22",
+    "fps": 10.0,
+    "nSteps": 21,
+    "nominal": "/more_results/22/nominal.mp4",
+    "pessimistic": "/more_results/22/pessimistic.mp4",
+    "holdsFinalFrame": false
+  },
+  {
+    "id": "33",
+    "fps": 10.0,
+    "nSteps": 21,
+    "nominal": "/more_results/33/nominal.mp4",
+    "pessimistic": "/more_results/33/pessimistic.mp4",
+    "holdsFinalFrame": false
+  },
+  {
+    "id": "44",
+    "fps": 10.0,
+    "nSteps": 21,
+    "nominal": "/more_results/44/nominal.mp4",
+    "pessimistic": "/more_results/44/pessimistic.mp4",
+    "holdsFinalFrame": false
+  },
+  {
+    "id": "55",
+    "fps": 10.0,
+    "nSteps": 21,
+    "nominal": "/more_results/55/nominal.mp4",
+    "pessimistic": "/more_results/55/pessimistic.mp4",
+    "holdsFinalFrame": false
+  },
+  {
+    "id": "1_fail",
+    "fps": 10.0,
+    "nSteps": 21,
+    "nominal": "/more_results/1_fail/nominal.mp4",
+    "pessimistic": "/more_results/1_fail/pessimistic.mp4",
+    "holdsFinalFrame": false
+  },
+  {
+    "id": "4_success",
+    "fps": 10.0,
+    "nSteps": 21,
+    "nominal": "/more_results/4_success/nominal.mp4",
+    "pessimistic": "/more_results/4_success/pessimistic.mp4",
+    "holdsFinalFrame": false
+  },
+  {
+    "id": "5_fail",
+    "fps": 10.0,
+    "nSteps": 15,
+    "nominal": "/more_results/5_fail/nominal.mp4",
+    "pessimistic": "/more_results/5_fail/pessimistic.mp4",
+    "holdsFinalFrame": true
+  },
+  {
+    "id": "6_fail",
+    "fps": 10.0,
+    "nSteps": 21,
+    "nominal": "/more_results/6_fail/nominal.mp4",
+    "pessimistic": "/more_results/6_fail/pessimistic.mp4",
+    "holdsFinalFrame": true
+  },
+  {
+    "id": "7_success",
+    "fps": 10.0,
+    "nSteps": 21,
+    "nominal": "/more_results/7_success/nominal.mp4",
+    "pessimistic": "/more_results/7_success/pessimistic.mp4",
+    "holdsFinalFrame": false
+  }
+]

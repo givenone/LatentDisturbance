@@ -8,8 +8,9 @@ import {VideoPlayer} from '../app/components/VideoPlayer';
 import {PaperPage} from '../app/components/PaperPage';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {Results} from '../app/components/Results';
+import {HardwareImaginations} from '../app/components/Experiments';
 import {Formulation} from '../app/components/Formulation';
-import {demo} from '../app/data/content';
+import {demo,experimentMedia} from '../app/data/content';
 import {frameAt,timeAt,filterColor,nextRandom,companionAdjustment} from '../app/data/playback';
 const dom=new JSDOM('<!doctype html><html><body><div id="root"></div></body></html>',{url:'http://localhost/'});
 Object.assign(globalThis,{window:dom.window,document:dom.window.document,HTMLElement:dom.window.HTMLElement,HTMLCanvasElement:dom.window.HTMLCanvasElement,MutationObserver:dom.window.MutationObserver,ResizeObserver:class{observe(){}disconnect(){}},React,IS_REACT_ACT_ENVIRONMENT:true});
@@ -59,7 +60,8 @@ test('shared playback seeks all four videos and both plots to the same frame',as
  const trace={reachability:[.3,.1,-.2,.4],is_filtered:[0,0,1,0]};
  const panels=[{label:'Nominal',videos:['/n1.mp4','/n2.mp4'],trace,color:'#0048a6'},{label:'Robust',videos:['/r1.mp4','/r2.mp4'],trace,color:'#ff9500'}];
  await act(async()=>root.render(<SyncedPlayer autoPlay={false} panels={panels} fps={10} nSteps={4}/>));
- assert.equal((host.querySelector('.timeline-controls button') as HTMLButtonElement).disabled,true);
+ assert.equal((host.querySelector('.timeline-controls button') as HTMLButtonElement).disabled,false);
+ assert.equal((host.querySelector('.timeline-controls button:nth-child(3)') as HTMLButtonElement).disabled,true);
  const clips=[...host.querySelectorAll('video')];
  await act(async()=>{clips.forEach(v=>{Object.defineProperty(v,'readyState',{configurable:true,value:4});v.dispatchEvent(new dom.window.Event('loadeddata',{bubbles:true}));});});
  await click('[aria-label="Play synchronized videos"]');assert.equal(plays,4);
@@ -136,7 +138,8 @@ test('continuous playhead does not redraw charts or repeatedly seek companion vi
  await act(async()=>{const ticks=[...callbacks.values()];callbacks.clear();ticks.forEach(fn=>fn(1000));});
  assert.equal(host.querySelector('.value-plot')!.getAttribute('aria-valuenow'),'0.12');
  assert.equal(clips[1].currentTime,.10,'small drift must not cause a seek');
- assert.ok(clips[1].playbackRate>1);assert.equal(redraws,0);
+ assert.equal(clips[0].playbackRate,1);
+ assert.ok(clips[1].playbackRate>1&&clips[1].playbackRate<1.05);assert.equal(redraws,0);
  assert.equal(companionAdjustment(1,.97,1,20).seek,null);assert.equal(companionAdjustment(1,.5,1,20).seek,1);
  await act(async()=>root.unmount());assert.equal(callbacks.size,0);
 });
@@ -159,7 +162,7 @@ test('scrubbing while play is still loading restores playback after the pending 
 test('one controller synchronizes an imagination pair and automatically repeats both clips',async()=>{
  dom.window.HTMLMediaElement.prototype.play=async function(){Object.defineProperty(this,'paused',{configurable:true,value:false});};
  const root=createRoot(host);
- await act(async()=>root.render(<SyncedPlayer autoPlay={true} panels={[{label:'Nominal Imagination',videos:['/n.mp4'],color:'#0048a6'},{label:'Pessimistic Imagination',videos:['/p.mp4'],color:'#ff9500'}]} fps={30} nSteps={93}/>));
+ await act(async()=>root.render(<SyncedPlayer autoPlay={true} defaultSpeed={.5} panels={[{label:'Nominal Imagination',videos:['/n.mp4'],color:'#0048a6'},{label:'Pessimistic Imagination',videos:['/p.mp4'],color:'#ff9500'}]} fps={30} nSteps={93}/>));
  const clips=[...host.querySelectorAll('video')];
  await act(async()=>clips.forEach(v=>{Object.defineProperty(v,'readyState',{configurable:true,value:4});v.dispatchEvent(new dom.window.Event('loadeddata'));}));
  assert.ok(clips.every(v=>!v.paused));assert.equal(host.querySelectorAll('.timeline-controls').length,1);assert.equal(host.querySelectorAll('canvas').length,0);
@@ -167,7 +170,7 @@ test('one controller synchronizes an imagination pair and automatically repeats 
  await act(async()=>{Object.getOwnPropertyDescriptor(dom.window.HTMLInputElement.prototype,'value')!.set!.call(range,'23.7');range.dispatchEvent(new dom.window.Event('input',{bubbles:true}));});
  clips.forEach(v=>assert.equal(v.currentTime,23.7/30));
  await act(async()=>clips[0].dispatchEvent(new dom.window.Event('ended')));
- clips.forEach(v=>assert.equal(v.currentTime,0));assert.ok(clips.every(v=>!v.paused));
+ clips.forEach(v=>{assert.equal(v.currentTime,0);assert.equal(v.playbackRate,.5);});assert.ok(clips.every(v=>!v.paused));
  await act(async()=>root.unmount());
 });
 
@@ -253,4 +256,65 @@ test('safety gain has consistent decimal ticks, a visible zero, and room for neg
   chart.data.datasets[0].data.forEach(v=>assert.ok(Number(v)>=-.2&&Number(v)<=.3));
  }
  await act(async()=>root.unmount());
+});
+
+test('mobile metadata-only preload starts playback without waiting for a decoded frame',async()=>{
+ let plays=0,pauses=0;
+ dom.window.HTMLMediaElement.prototype.play=async function(){plays++;Object.defineProperty(this,'paused',{configurable:true,value:false});this.dispatchEvent(new dom.window.Event('waiting'));};
+ dom.window.HTMLMediaElement.prototype.pause=function(){pauses++;Object.defineProperty(this,'paused',{configurable:true,value:true});};
+ const root=createRoot(host),panels=[{label:'Robust',videos:['/a.mp4','/b.mp4'],color:'#ff9500'}];
+ try{
+  await act(async()=>root.render(<SyncedPlayer panels={panels} fps={20} nSteps={100}/>));
+  assert.equal(plays,0);
+  const clips=[...host.querySelectorAll('video')];
+  await act(async()=>clips.forEach(v=>{Object.defineProperty(v,'readyState',{configurable:true,value:1});v.dispatchEvent(new dom.window.Event('loadedmetadata'));}));
+  assert.equal(plays,2);assert.equal(pauses,0,'initial buffering must not cancel pending play requests');
+  assert.ok(clips.every(v=>!v.paused));
+  assert.equal((host.querySelector('[aria-label="Play synchronized videos"]') as HTMLButtonElement).disabled,true);
+ }finally{await act(async()=>root.unmount());}
+});
+test('a mobile tap can load videos from readyState zero and retry blocked autoplay',async()=>{
+ let plays=0,blocked=true;
+ dom.window.HTMLMediaElement.prototype.play=function(){plays++;if(blocked)return Promise.reject(new dom.window.DOMException('Tap required','NotAllowedError'));Object.defineProperty(this,'paused',{configurable:true,value:false});return Promise.resolve();};
+ const root=createRoot(host),panels=[{label:'Robust',videos:['/a.mp4','/b.mp4'],color:'#ff9500'}];
+ try{
+  await act(async()=>root.render(<SyncedPlayer autoPlay={false} panels={panels} fps={20} nSteps={100}/>));
+  const clips=[...host.querySelectorAll('video')];assert.ok(clips.every(v=>v.readyState===0));
+  await click('[aria-label="Play synchronized videos"]');
+  assert.equal(plays,2);assert.match(host.textContent!,/Press play to retry/);
+  assert.equal((host.querySelector('[aria-label="Play synchronized videos"]') as HTMLButtonElement).disabled,false);
+  blocked=false;await click('[aria-label="Play synchronized videos"]');
+  assert.equal(plays,4);assert.ok(clips.every(v=>!v.paused));assert.equal(host.querySelector('.media-error'),null);
+ }finally{await act(async()=>root.unmount());}
+});
+
+test('all real-world imagination examples share one playback clock and correct camera labels',async()=>{
+ dom.window.HTMLMediaElement.prototype.play=async function(){Object.defineProperty(this,'paused',{configurable:true,value:false});};
+ dom.window.HTMLMediaElement.prototype.pause=function(){Object.defineProperty(this,'paused',{configurable:true,value:true});};
+ const root=createRoot(host);
+ try{
+  await act(async()=>root.render(<HardwareImaginations/>));
+  for(const [i,example] of experimentMedia.hardwareImagination.entries()){
+   assert.match(host.querySelector('.trajectory-picker span')!.textContent!,new RegExp(`Example ${i+1} / 10`));
+   const clips=[...host.querySelectorAll('video')];
+   assert.deepEqual(clips.map(v=>v.getAttribute('src')),[example.left.src,example.right.src]);
+   assert.equal(host.querySelectorAll('.camera-layout-side-by-side').length,2);
+   assert.equal(host.querySelectorAll('.timeline-controls').length,1);
+   assert.equal(host.querySelectorAll('input[type=range]').length,1);
+   await act(async()=>clips.forEach(v=>{Object.defineProperty(v,'readyState',{configurable:true,value:4});v.dispatchEvent(new dom.window.Event('loadedmetadata'));}));
+   clips.forEach(v=>assert.equal(v.playbackRate,.5));
+   const range=host.querySelector('input')!;
+   await act(async()=>{range.value='7.5';range.dispatchEvent(new dom.window.Event('input',{bubbles:true}));});
+   clips.forEach(v=>assert.equal(v.currentTime,.75));
+   assert.equal(host.querySelector('.figure-caption')!.textContent!.includes('holds its final frame'),example.holdsFinalFrame);
+   await act(async()=>clips[0].dispatchEvent(new dom.window.Event('ended')));
+   clips.forEach(v=>assert.equal(v.currentTime,0));
+   await click('[aria-label="Next imagination example"]');
+  }
+  assert.match(host.querySelector('.trajectory-picker span')!.textContent!,/Example 1 \/ 10/);
+  await click('[aria-label="Previous imagination example"]');
+  assert.match(host.querySelector('.trajectory-picker span')!.textContent!,/Example 10 \/ 10/);
+  await click('[aria-label="Shuffle imagination examples"]');
+  assert.doesNotMatch(host.querySelector('.trajectory-picker span')!.textContent!,/Example 10 \/ 10/);
+ }finally{await act(async()=>root.unmount());}
 });

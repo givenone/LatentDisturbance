@@ -64,3 +64,4 @@ for source in (ROOT / 'sim_results/processed').rglob('*.mp4'):
         subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-i', str(source), '-vf', 'scale=480:-2', '-c:v', 'libx264', '-crf', '26', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-an', '-movflags', '+faststart', str(target)], check=True)
 print('Prepared 7 actions, 44 hardware trajectories, 38 simulation pairs; all frame counts verified.')
 subprocess.run(['python3', str(ROOT / 'scripts/prepare-playback.py')], check=True)
+subprocess.run(['python3', str(ROOT / 'scripts/prepare-real-imaginations.py')], check=True)

@@ -45,6 +45,7 @@ next-env.d.ts
 /filtering_results/
 /sim_results/
 /front_figure/
+/more_results/
 /energy.png
 
 # files in public/ not used by the site
