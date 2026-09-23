@@ -8,7 +8,7 @@ const equations = {
       \pi^{\mathrm{task}}(z), & \text{if }\colorbox{#FFCC80}{$\mathbb E_{z'\sim f_z^{\star}(\cdot\mid z,\pi^{\mathrm{task}}(z))}$}\big[V^{\mathrm{safe}}_{\mathrm{rob}}(z')\big]>0,\\[.4em]
       \pi^{\mathrm{safe}}_{\mathrm{rob}}(z), & \text{otherwise}.
     \end{cases}`,
-  steering: String.raw`\pi_{\mathrm{rob}}(z)=\underset{\mathbf a\in\{\mathbf a^{(k)}\}_{k=1}^{K}}{\arg\min}\;\colorbox{#FFCC80}{$\displaystyle\mathbb E_{\mathbf z'\sim f_z^{\pi_d}(\cdot\mid z,\mathbf a)}$}\big[C(\mathbf z')\big]`,
+  steering: String.raw`\pi_{\mathrm{rob}}(z)=\underset{\mathbf a\in\{\mathbf a^{(k)}\}_{k=1}^{K}}{\arg\min}\;\colorbox{#FFCC80}{$\displaystyle\mathbb E_{\mathbf z'\sim f_z^{\star}(\cdot\mid z,\mathbf a)}$}\big[C(\mathbf z')\big]`,
 };
 const rendered = Object.fromEntries(Object.entries(equations).map(([key,tex]) => [key,katex.renderToString(tex,{
   displayMode:true,throwOnError:true,output:'htmlAndMathml',trust:false,
