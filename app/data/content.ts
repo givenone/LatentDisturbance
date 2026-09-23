@@ -12,10 +12,10 @@ export const metadata = {
  affiliations: 'Carnegie Mellon University',
  intro: 'Robust decision-making in world models, with latent-space disturbances modeled as perturbations to the learned latent dynamics that induce pessimistic yet plausible imaginations.',
  takeaways: [
-  {tag:'Method',text:'We model latent disturbances as perturbations to the learned latent dynamics, constrained by a <strong>calibrated uncertainty set</strong> that includes plausible transitions while excluding implausible ones. The worst-case disturbance and robust action are jointly solved through <strong>efficient game-theoretic optimization</strong>.'},
-  {tag:'Robust Runtime Policy Steering',text:'<strong>54%→15% failure rate</strong> with a robust latent safety filter and <strong>35%→70% success rate</strong> with sample-and-verify policy steering, improving vision-based policies in contact-rich manipulation under unobservable uncertainty.'},
-  {tag:'Robust Optimization in World Model Latent Space',text:'Enables <strong>robust decision-making directly in the world-model latent space</strong>, evaluated against ground-truth robust solutions in controlled settings with known system dynamics.'},
-  {tag:'Benchmarks',text:'Validated on three vision-based control tasks in simulation and the real world: a Dubins car, block pouring with a manipulator, and serving a sunny-side-up egg with a Franka robot.'},
+  {tag:'Method',text:'Latent disturbances perturb the learned dynamics within a <strong>calibrated uncertainty set</strong> of plausible transitions, solved via <strong>efficient game-theoretic optimization</strong>.'},
+  {tag:'Robust Runtime Policy Steering',text:'<strong>54%→15% failure rate</strong> with a robust latent safety filter and <strong>35%→70% success rate</strong> with sample-and-verify in contact-rich manipulation.'},
+  {tag:'Robust Optimization in World Model Latent Space',text:'<strong>Robust decision-making directly in the latent space of world models</strong>, validated against ground-truth robust solutions when system dynamics and disturbances are known.'},
+  {tag:'Benchmarks',text:'Three vision-based tasks in simulation and the real world: Dubins car, block pouring, and egg serving with a Franka robot.'},
  ],
 };
 export const colors = { nominal: '#0048a6', ours: '#ff9500', ood: '#740cad', teal: '#0d948f', base: '#777777' };
@@ -54,16 +54,6 @@ export const steps = [
   { title: 'Calibrate the radius', color: colors.teal, text: 'Calibrate the uncertainty radius around the prediction.', detail: 'Calibrated dynamics-aware radius' },
   { title: 'Calibrate the OOD boundary', color: colors.teal, text: 'Calibrate the OOD threshold; retain the green region.', detail: 'Calibrated uncertainty set' },
   { title: 'Find the worst-case disturbance', color: colors.ours, text: 'Find the most adverse latent disturbance within the set.', detail: 'Worst-case latent disturbance' },
-];
-export const galleries = [
-  { id: 'simulation', title: 'Simulation', subtitle: 'Block pouring', examples: [
-    { title: 'DreamerV3 · safety filtering', caption: '', nominal: asset('/gallery/sim-dreamer-nominal.mp4'), ours: asset('/gallery/sim-dreamer-ours.mp4') },
-    { title: 'Diffusion Policy · safety filtering', caption: '', nominal: asset('/gallery/sim-diffusion-nominal.mp4'), ours: asset('/gallery/sim-diffusion-ours.mp4') },
-  ] },
-  { id: 'hardware', title: 'Real World', subtitle: 'Egg serving', examples: [
-    { title: 'Egg serving · safety filtering', caption: '', nominal: asset('/gallery/real-filtering-nominal.mp4'), ours: asset('/gallery/real-filtering-ours.mp4') },
-    { title: 'Egg serving · policy steering', caption: '', nominal: asset('/gallery/real-steering-nominal.mp4'), ours: asset('/gallery/real-steering-ours.mp4') },
-  ] },
 ];
 export const methodNames = ['Base Policy', 'Nominal', 'Worst-of-10', 'CVaR (0.1)', 'Without OOD', 'Ours'];
 export const methodColors = [colors.base, colors.nominal, '#0091ff', '#0091ff', colors.ood, colors.ours];

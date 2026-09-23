@@ -4,11 +4,6 @@ import {VideoPlayer} from './VideoPlayer';
 import { actions, actionColor, asset, demo, outcomes, outcomePoint, steps, type Outcome } from '../data/content';
 import { drawLatentScene, drawMethodWithLeaders, methodAnnotations, outcomeLabels, animationProgress } from './latentDrawing';
 
-export function useMediaAvailable(src:string){
- const [available,setAvailable]=useState(false);
- useEffect(()=>{const abort=new AbortController();setAvailable(false);fetch(src,{method:'HEAD',signal:abort.signal}).then(r=>setAvailable(r.ok&&/^(video|image)\//.test(r.headers.get('content-type')||''))).catch(()=>{});return()=>abort.abort();},[src]);return available;
-}
-export function Placeholder({children}:{kind?:string;children?:React.ReactNode}){return <div className="media-placeholder"><span>Media unavailable</span><small>{children}</small></div>;}
 function Drawing({kind,action,stage=0,replay=0}:{kind:'scene'|'method';action:number;stage?:number;replay?:number}){
  const ref=useRef<HTMLCanvasElement>(null);
  useEffect(()=>{
@@ -25,6 +20,8 @@ function Drawing({kind,action,stage=0,replay=0}:{kind:'scene'|'method';action:nu
 export function Demo(){
  const [action,setAction]=useState(1),[selected,setSelected]=useState(false),[outcome,setOutcome]=useState<Outcome>('ours'),[replay,setReplay]=useState(0),[playRequest,setPlayRequest]=useState(0),[currentDone,setCurrentDone]=useState(false);
  const selectAction=(id:number)=>{setAction(id);setSelected(true);setCurrentDone(false);setReplay(n=>n+1);setPlayRequest(n=>n+1);};
+ // Start with a random trajectory selected (after mount, so server and client render the same markup).
+ useEffect(()=>{const frame=window.requestAnimationFrame(()=>selectAction(1+Math.floor(Math.random()*actions.length)));return()=>window.cancelAnimationFrame(frame);},[]);
  const chosen=outcomes.find(o=>o.id===outcome)!;
  return <div className="demo-shell integrated-demo">
   <div className="demo-topline"><h2>Latent-Space Disturbance for Robust Optimization in World Models</h2></div>
