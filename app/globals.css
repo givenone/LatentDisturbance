@@ -199,3 +199,5 @@ html{overflow-x:hidden}body{overflow-x:clip}
 .imagined-state-player .wm-note{margin-top:6px}
 /* Overview title: LUCID with its initials highlighted in the full name. */
 .demo-topline .method-name,.demo-topline .acronym-letter{color:#ff9500}
+/* Main project video under the hero buttons. */
+.hero-video-wrap{max-width:720px;margin:28px auto 0;border:1px solid var(--line);box-shadow:0 2px 12px rgba(0,0,0,.08);background:#000}.hero-video-wrap video{display:block;width:100%;aspect-ratio:16/9}
