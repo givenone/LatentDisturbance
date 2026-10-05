@@ -8,7 +8,7 @@ export const metadata = {
  authors: [{name:'Junwon Seo',href:'https://junwon.me/'},{name:'Andrea Bajcsy',href:'https://www.cs.cmu.edu/~abajcsy/'}],
  description: 'We model latent disturbances as perturbations to learned world-model dynamics, inducing pessimistic yet plausible imaginations for robust safety filtering and policy steering.',
  // Public URL of the deployed site (e.g. https://example.github.io/). Enables canonical, Open Graph, and sitemap URLs.
- siteUrl: 'https://junwon-vision.github.io/LatentDisturbance/',
+ siteUrl: 'https://junwon.me/LatentDisturbance/',
  keywords: ['world models','robust optimization','latent disturbance','latent safety filter','policy steering','robot learning','uncertainty set','conformal prediction','safe robot manipulation'],
  resources: [{label:'arXiv',href:null},{label:'Code',href:'https://github.com/CMU-IntentLab/LatentDisturbance'}] as {label:string;href:string|null}[],
  affiliations: 'Carnegie Mellon University',
