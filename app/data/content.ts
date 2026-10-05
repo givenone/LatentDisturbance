@@ -3,19 +3,21 @@ import hardwareImaginations from './hardware-imaginations.json';
 export const asset=(path:string)=>`${process.env.NEXT_PUBLIC_BASE_PATH??''}${path}`;
 export const metadata = {
  title: 'Modeling Latent Disturbances for Robust Decision-Making in World Models',
+ // Line break used in the page header, matching the paper title.
+ titleLines: ['Modeling Latent Disturbances for','Robust Decision-Making in World Models'],
  authors: [{name:'Junwon Seo',href:'https://junwon.me/'},{name:'Andrea Bajcsy',href:'https://www.cs.cmu.edu/~abajcsy/'}],
  description: 'We model latent disturbances as perturbations to learned world-model dynamics, inducing pessimistic yet plausible imaginations for robust safety filtering and policy steering.',
  // Public URL of the deployed site (e.g. https://example.github.io/). Enables canonical, Open Graph, and sitemap URLs.
  siteUrl: 'https://junwon-vision.github.io/LatentDisturbance/',
  keywords: ['world models','robust optimization','latent disturbance','latent safety filter','policy steering','robot learning','uncertainty set','conformal prediction','safe robot manipulation'],
- resources: [{label:'arXiv',href:null},{label:'Code',href:null}] as {label:string;href:string|null}[],
+ resources: [{label:'arXiv',href:null},{label:'Code',href:'https://github.com/CMU-IntentLab/LatentDisturbance'}] as {label:string;href:string|null}[],
  affiliations: 'Carnegie Mellon University',
- intro: 'Robust decision-making in the latent space of world models, by modeling latent-space disturbances that induce pessimistic yet plausible latent dynamics.',
+ intro: 'Robust decision-making in the latent space of world models, by modeling latent-space disturbances.',
  takeaways: [
   {tag:'Method',text:'Latent disturbances perturb the learned dynamics within a <strong>calibrated uncertainty set</strong> of plausible transitions, solved via <strong>efficient game-theoretic optimization</strong>.'},
-  {tag:'Robust Runtime Policy Steering',text:'<strong>54%→15% failure rate</strong> with a robust latent safety filter and <strong>35%→70% success rate</strong> with sample-and-verify in contact-rich manipulation.'},
+  {tag:'Robust Policy Steering',text:'<strong>54%→15% failure rate</strong> with a robust latent safety filter and <strong>35%→70% success rate</strong> with sample-and-verify in contact-rich manipulation.'},
   {tag:'Robust Optimization in World Model Latent Space',text:'<strong>Robust decision-making directly in the latent space of world models</strong>, validated against ground-truth robust solutions when system dynamics and disturbances are known.'},
-  {tag:'Benchmarks',text:'Three vision-based tasks in simulation and the real world: Dubins car, block pouring, and egg serving with a Franka robot.'},
+  {tag:'Benchmarks',text:'Three vision-based tasks in simulation and the real world: Dubins’ car, block pouring, and egg serving with a Franka robot.'},
  ],
 };
 export const colors = { nominal: '#0048a6', ours: '#ff9500', ood: '#740cad', teal: '#0d948f', base: '#777777' };
@@ -31,7 +33,7 @@ export const actions = [
 export const actionColor=(action:number)=>actions[action-1].result==='success'?colors.ours:colors.nominal;
 export const outcomes = [
   { id: 'nominal', label: 'Nominal', short: 'Nominal imagination', color: colors.nominal, point: [.50,.50], description: 'The world model’s predicted outcome.' },
-  { id: 'ood', label: 'OOD', short: 'Out-of-distribution imagination', color: colors.ood, point: [.73,.77], description: 'An implausible imagination excluded by the OOD constraint.' },
+  { id: 'ood', label: 'OOD', short: 'Out-of-distribution imagination', color: colors.ood, point: [.73,.77], description: 'An implausible imagination excluded by the in-distribution constraint.' },
   { id: 'ours', label: 'Pessimistic', short: 'Pessimistic imagination', color: colors.ours, point: [.76,.40], description: 'A worst-case imagination within the calibrated set.' },
 ] as const;
 export type Outcome = typeof outcomes[number]['id'];
@@ -45,7 +47,7 @@ export const experimentMedia={
     right:{src:asset(item.pessimistic),label:'Pessimistic imagination'},
   })),
   stochasticity:asset('/sim_results/processed/task_intro.mp4'),
-  ood:{title:'Imagination using latent disturbance optimized without in-distribution constraints',fps:30,nSteps:93,left:{src:asset('/sim_results/processed/ood/real_1.mp4'),label:'Executed in simulation'},right:{src:asset('/sim_results/processed/ood/ood_1.mp4'),label:'OOD imagination'}},
+  ood:{title:'Imagination using latent disturbance optimized without the in-distribution constraint',fps:30,nSteps:93,left:{src:asset('/sim_results/processed/ood/real_1.mp4'),label:'Executed in simulation'},right:{src:asset('/sim_results/processed/ood/ood_1.mp4'),label:'OOD imagination'}},
   imagination:[1,2].map(i=>({title:`Imagination ${i}`,fps:30,nSteps:i===1?518:411,left:{src:asset(`/sim_results/processed/imagination/nominal_${i}.mp4`),label:'Nominal imagination'},right:{src:asset(`/sim_results/processed/imagination/pessimistic_${i}.mp4`),label:'Pessimistic imagination'}})),
 };
 export const steps = [
@@ -55,7 +57,7 @@ export const steps = [
   { title: 'Calibrate the OOD boundary', color: colors.teal, text: 'Calibrate the OOD threshold; retain the green region.', detail: 'Calibrated uncertainty set' },
   { title: 'Find the worst-case disturbance', color: colors.ours, text: 'Find the most adverse latent disturbance within the set.', detail: 'Worst-case latent disturbance' },
 ];
-export const methodNames = ['Base Policy', 'Nominal', 'Worst-of-10', 'CVaR (0.1)', 'Without OOD', 'Ours'];
+export const methodNames = ['Base Policy', 'Nominal', 'Worst-of-10', 'CVaR (0.1)', 'UnConf.', 'Ours'];
 export const methodColors = [colors.base, colors.nominal, '#0091ff', '#0091ff', colors.ood, colors.ours];
 
 export type OODRegion = { cx:number; cy:number; rx:number; ry:number; angle:number; points:number[][] };

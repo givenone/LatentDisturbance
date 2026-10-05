@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import {VideoPlayer} from './VideoPlayer';
+import {WMNote} from './ExperimentText';
 import { actions, actionColor, asset, demo, outcomes, outcomePoint, steps, type Outcome } from '../data/content';
 import { drawLatentScene, drawMethodWithLeaders, methodAnnotations, outcomeLabels, animationProgress } from './latentDrawing';
 
@@ -24,7 +25,7 @@ export function Demo(){
  useEffect(()=>{const frame=window.requestAnimationFrame(()=>selectAction(1+Math.floor(Math.random()*actions.length)));return()=>window.cancelAnimationFrame(frame);},[]);
  const chosen=outcomes.find(o=>o.id===outcome)!;
  return <div className="demo-shell integrated-demo">
-  <div className="demo-topline"><h2>Latent-Space Disturbance for Robust Optimization in World Models</h2></div>
+  <div className="demo-topline"><h2><span className="method-name">LUCID</span>: {([['Latent-space',' '],['Uncertainty','-'],['Calibrated',' '],['In-distribution',' '],['Disturbance','']] as const).map(([word,joiner])=><span key={word}><span className="acronym-letter">{word[0]}</span>{word.slice(1)}{joiner}</span>)}</h2></div>
   <div className="demo-workspace">
    <div className="trajectory-selection"><p className="demo-task"><em>Serve a sunny-side-up egg without flipping it.</em></p><div className="action-observation"><img src={demo.initial} alt="Egg on the spatula before serving"/><svg viewBox="0 0 494 332" aria-label="Select a trajectory"><g transform="translate(0 -7)">{[...actions.filter(a=>a.id!==action),actions[action-1]].map(a=><g key={a.id}>
     <path d={a.path} fill="none" stroke={selected&&a.id===action?'#1c232b':'#eef0f2'} strokeOpacity={selected&&a.id===action?.55:.18} strokeWidth={selected&&a.id===action?4.5:2.6} strokeLinecap="round"/>
@@ -37,7 +38,7 @@ export function Demo(){
     {outcomes.map((o,i)=><div key={o.id}><button className={`outcome-point ${o.id===outcome?'selected':''}`} style={{left:`${50+outcomePoint(action,o.id)[0]*50}%`,top:`${(outcomePoint(action,o.id)[1]*300+45)/4}%`}} onClick={()=>setOutcome(o.id)} aria-label={`Show ${o.label} outcome`} aria-pressed={o.id===outcome}/><button className="outcome-label" style={{left:`${outcomeLabels[i][0]/8}%`,top:`${outcomeLabels[i][1]/4}%`,color:o.color}} onClick={()=>setOutcome(o.id)} aria-pressed={o.id===outcome}>{o.short}</button></div>)}
     </div><div className="schematic-caption"><button onClick={()=>setReplay(n=>n+1)} aria-label="Replay latent-space animation">↻ Replay</button><span className="sr-only demo-explanation" aria-live="polite">ACTION {action} / {chosen.label.toUpperCase()}</span></div>
    </div>
-   <div className="demo-players"><div className="current-state-player"><h3>Current state</h3><VideoPlayer key={`${action}-${playRequest}`} src={demo.original(action)} autoPlay={selected} loop={false} playbackRate={3} disabled={!selected} onEnded={()=>{if(selected)setCurrentDone(true);}} label="Current state"/></div><div className="imagined-state-player"><h3>WM imaginations</h3><VideoPlayer key={`${demo.video(action,outcome)}-${playRequest}-${currentDone}`} src={demo.video(action,outcome)} label={`Action ${action}, ${chosen.short}`} color={chosen.color} autoPlay={selected&&currentDone} loop={false} disabled={!selected}/><div className="imagination-selector" aria-label="Select WM imagination">{(['nominal','ours','ood'] as const).map(id=>{const option=outcomes.find(o=>o.id===id)!;return <button key={id} onClick={()=>setOutcome(id)} aria-pressed={outcome===id} style={{'--outcome-color':option.color} as React.CSSProperties}>{option.label}</button>;})}</div></div></div>
+   <div className="demo-players"><div className="current-state-player"><h3>Current state</h3><VideoPlayer key={`${action}-${playRequest}`} src={demo.original(action)} autoPlay={selected} loop={false} playbackRate={3} disabled={!selected} onEnded={()=>{if(selected)setCurrentDone(true);}} label="Current state"/></div><div className="imagined-state-player"><h3>WM imaginations</h3><VideoPlayer key={`${demo.video(action,outcome)}-${playRequest}-${currentDone}`} src={demo.video(action,outcome)} label={`Action ${action}, ${chosen.short}`} color={chosen.color} autoPlay={selected&&currentDone} loop={false} disabled={!selected}/><div className="imagination-selector" aria-label="Select WM imagination">{(['nominal','ours','ood'] as const).map(id=>{const option=outcomes.find(o=>o.id===id)!;return <button key={id} onClick={()=>setOutcome(id)} aria-pressed={outcome===id} style={{'--outcome-color':option.color} as React.CSSProperties}>{option.label}</button>;})}</div><WMNote/></div></div>
    </div>
   </div>
  </div>;

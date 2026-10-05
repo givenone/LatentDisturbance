@@ -127,6 +127,11 @@ html{overflow-x:hidden}body{overflow-x:clip}
 
 /* Paper identity above a rule; compact monochrome takeaways below. */
 .hero{padding-bottom:30px}.hero h1{max-width:900px;font-size:2rem;line-height:1.35;text-wrap:balance}
+.hero-title{position:relative;width:fit-content;max-width:100%;margin:0 auto 16px}.hero-title h1{margin:0}.title-line{display:block}
+/* The logo hangs left of the title so the title stays centered on the page axis. */
+.hero-logo{position:absolute;right:calc(100% + 20px);top:50%;transform:translateY(-50%);width:88px;height:88px;object-fit:contain}
+@media(max-width:1000px){.hero-title{display:flex;flex-direction:column;align-items:center;gap:12px}.hero-logo{position:static;transform:none;width:72px;height:72px}}
+@media(max-width:600px){.hero-logo{width:60px;height:60px}.title-line{display:inline}}
 .hero .authors{margin:0 auto 6px;color:var(--ink)}.authors a{color:hsl(204,86%,53%)}.authors a:hover{text-decoration:underline}.hero .affiliations{font-size:.8rem;color:var(--dim);margin:0 auto 14px}
 .paper-resources{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:20px}.paper-resources>a,.paper-resources>button{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:6px;background:#fff;color:var(--muted);padding:7px 16px;font-size:.85rem;font-weight:600;white-space:nowrap}.paper-resources>a:hover{background:var(--alt);border-color:#bbb;color:var(--ink)}.paper-resources svg{flex-shrink:0}
 .paper-resources>button:disabled{opacity:.5;cursor:default}
@@ -187,3 +192,10 @@ html{overflow-x:hidden}body{overflow-x:clip}
  .with-plots .timeline-controls>button,.with-plots .playback-speed{min-height:40px}
 }
 .copyright{margin-top:10px;font-size:.75rem;color:var(--dim)}
+
+/* Small disclaimer under world-model imaginations. */
+.wm-note{font-size:.68rem;font-style:italic;color:var(--dim);text-align:center;line-height:1.4}
+.imagination-pair .wm-note{padding:8px 12px 10px}
+.imagined-state-player .wm-note{margin-top:6px}
+/* Overview title: LUCID with its initials highlighted in the full name. */
+.demo-topline .method-name,.demo-topline .acronym-letter{color:#ff9500}

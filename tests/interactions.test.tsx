@@ -236,7 +236,7 @@ test('paper identity and resource placeholders precede monochrome takeaway cards
  assert.equal(page.querySelector('h1')!.textContent,'Modeling Latent Disturbances for Robust Decision-Making in World Models');
  assert.equal(page.querySelector('.authors a')!.getAttribute('href'),'https://junwon.me/');
  assert.equal(page.querySelectorAll('.authors a')[1].getAttribute('href'),'https://www.cs.cmu.edu/~abajcsy/');
- assert.equal(page.querySelectorAll('.paper-resources button[disabled]').length,2);
+ assert.equal(page.querySelectorAll('.paper-resources button[disabled]').length,1);
  assert.equal(page.querySelector('.hero')!.nextElementSibling!.className,'paper-summary');
  assert.equal(page.querySelectorAll('.paper-benefits article').length,3);
  assert.equal(page.querySelectorAll('.paper-benefits small').length,0);

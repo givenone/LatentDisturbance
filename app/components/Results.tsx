@@ -74,12 +74,12 @@ function metricData(rows:SimRow[],metric:Metric):Datum[]{
 const panels={
  stochastic:{id:'sim-uncertain',title:'Can robust filtering prevent failures under uncertainty?',setup:'Each policy is rolled out for 2,000 trajectories with randomized initial states and physics.',takeaways:[
   'Sampling-based (Worst-of-N) and risk-sensitive (CVaR) baselines are less effective: in high-dimensional latent spaces, sampling rarely finds meaningful worst cases, while extreme tails can include implausible states.',
-  'Ours optimizes against worst-case plausible latent dynamics, reducing failures while remaining far less conservative than Ours without OOD.',
+  'Ours optimizes against worst-case plausible latent dynamics, reducing failures while remaining far less conservative than UnConf., which drops the in-distribution constraint.',
   'Its interventions yield positive safety gains, moving the system toward safer realized states, whereas Nominal gains are smaller or even negative.',
  ]},
  replay:{id:'sim-controlled',title:'Robustness under controlled uncertainty',setup:'We replay 100 successful teleoperation trajectories, each under 20 different physics settings.',takeaways:[
   'Ours keeps most trajectories failure-free across all physics settings, with safety actions that remain effective across dynamics variations.',
-  'Without OOD also avoids failures, but only by rarely completing the task, since implausibly pessimistic imaginations make useful actions look unsafe.',
+  'UnConf. also avoids failures, but only by rarely completing the task, since implausibly pessimistic imaginations make useful actions look unsafe.',
  ]},
  fixed:{id:'sim-partial',title:'Robustness under partial observability',setup:'The same task with fixed physics, so uncertainty arises only from partial observability and model approximation.',takeaways:[
   'Even when the system is deterministic, the learned world model remains uncertain about future transitions due to partial observability.',
@@ -110,12 +110,12 @@ export function Results({kind='hardware'}:{kind?:'hardware'|'simulation'}){
   'The Nominal filter is effective only under certain surfaces: its fallback actions break down once the unobserved contact properties change.',
  ]}/>
  <h3 className="experiment-heading" id="hw-policies">Robustly safeguarding and steering task policies</h3>
- <div className="chart-grid three">{(['diffusion policy','openpi'] as const).map((key,i)=>{const p=hardware['Policy Results'][key];return <RateChart key={key} title={`${i===0?'Diffusion Policy':'π₀.₅'} · safety filtering`} subtitle="Success rate ↑ · n = 20" data={countData([p.nofilter,p.nominal,p.robust],20)}/>;})}<RateChart title="π₀.₅ · policy steering" subtitle="Success rate ↑ · n = 20" data={countData([steering.baseline,steering['nominal imagination'],steering['adversarial imagination (w.o. OOD)'],steering['adversarial imagination']],20,false,['Base Policy','Nominal','Without OOD','Ours'],[colors.base,colors.nominal,colors.ood,colors.ours])}/></div>
+ <div className="chart-grid three">{(['diffusion policy','openpi'] as const).map((key,i)=>{const p=hardware['Policy Results'][key];return <RateChart key={key} title={`${i===0?'Diffusion Policy':'π₀.₅'} · safety filtering`} subtitle="Success rate ↑ · n = 20" data={countData([p.nofilter,p.nominal,p.robust],20)}/>;})}<RateChart title="π₀.₅ · policy steering" subtitle="Success rate ↑ · n = 20" data={countData([steering.baseline,steering['nominal imagination'],steering['adversarial imagination (w.o. OOD)'],steering['adversarial imagination']],20,false,['Base Policy','Nominal','UnConf.','Ours'],[colors.base,colors.nominal,colors.ood,colors.ours])}/></div>
  <Caption>Left two panels: safety filtering over 20 trials with Scotch tape on the spatula. Right panel: sample-and-verify steering of π₀.₅, which evaluates 8 candidate action chunks in world-model imagination and executes the one with the best predicted outcome.</Caption>
  <Takeaways items={[
   'As a safety filter, Ours improves success more than Nominal for both a diffusion policy and a fine-tuned VLA.',
   'In steering, Ours selects actions that remain favorable even under plausible worst-case futures.',
-  'Nominal steering imagines optimistic futures for risky actions, while steering without OOD imagines infeasible failures even for safe actions, weakening discrimination among candidates.',
+  'Nominal steering imagines optimistic futures for risky actions, while UnConf. steering imagines implausible failures even for safe actions, weakening discrimination among candidates.',
  ]}/>
  </>}{kind==='simulation'&&<div className="result-group"><MetricPanel mode="stochastic"/><MetricPanel mode="replay"/><MetricPanel mode="fixed"/></div>}</div>;
 }

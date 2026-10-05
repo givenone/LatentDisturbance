@@ -15,17 +15,17 @@ const rendered = Object.fromEntries(Object.entries(equations).map(([key,tex]) =>
 })]));
 
 export function RuntimeSteering(){return <section className="section runtime-steering" id="runtime-steering" aria-labelledby="runtime-heading">
-  <div className="section-intro"><h2 id="runtime-heading">Use case: Robust Runtime Policy Steering</h2><p>This latent-space robust optimization can be used to steer a task policy π<sup>task</sup> at runtime, preventing hard-to-model failures under uncertainty. We instantiate it for two policy-steering paradigms, replacing nominal world-model imaginations with pessimistic yet plausible ones.</p></div>
+  <div className="section-intro"><h2 id="runtime-heading">Application: Robust Policy Steering</h2><p>This latent-space robust optimization can be used to steer a task policy π<sup>task</sup> at runtime, preventing hard-to-model failures under uncertainty. We instantiate it for two policy-steering paradigms, replacing nominal world-model imaginations with pessimistic yet plausible ones.</p></div>
   <div className="runtime-cards">
     <article className="runtime-card">
-      <h3>Latent Safety Filter</h3>
+      <h3>Latent Safety Filtering</h3>
       <p>Safeguard π<sup>task</sup> with least-restrictive filtering: evaluate the safety of the action proposed by the task policy, and intervene with the robust safety policy only when that action is doomed to fail.</p>
       <div className="typeset-equation runtime-equation" dangerouslySetInnerHTML={{__html:rendered.filtering}}/>
       <p>The robust safety value and safety policy are learned with pessimistic imaginations induced by the <mark className="highlight-orange">latent disturbance</mark>:</p>
       <div className="typeset-equation runtime-equation" dangerouslySetInnerHTML={{__html:rendered.bellman}}/>
     </article>
     <article className="runtime-card">
-      <h3>Sample &amp; Verify</h3>
+      <h3>Sample-and-Verify</h3>
       <p>Samples K candidate action sequences a<sup>(k)</sup> ∼ π<sup>task</sup>(z), evaluates each with world-model imaginations, and executes the one with the lowest expected cost.</p>
       <div className="typeset-equation runtime-equation" dangerouslySetInnerHTML={{__html:rendered.steering}}/>
       <p className="runtime-note">The <mark className="highlight-orange">learned latent disturbance</mark> generates adverse futures for each candidate, so action selection accounts for calibrated system uncertainty.</p>
