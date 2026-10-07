@@ -201,3 +201,4 @@ html{overflow-x:hidden}body{overflow-x:clip}
 .demo-topline .method-name,.demo-topline .acronym-letter{color:#ff9500}
 /* Main project video under the hero buttons. */
 .hero-video-wrap{max-width:720px;margin:28px auto 0;border:1px solid var(--line);box-shadow:0 2px 12px rgba(0,0,0,.08);background:#000}.hero-video-wrap video{display:block;width:100%;aspect-ratio:16/9}
+.bibtex{margin:0;background:var(--alt);border:1px solid var(--line);border-radius:10px;padding:20px 24px;font-size:.82rem;line-height:1.7;overflow-x:auto;white-space:pre;color:var(--ink)}

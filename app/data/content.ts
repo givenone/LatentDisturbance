@@ -10,7 +10,13 @@ export const metadata = {
  // Public URL of the deployed site (e.g. https://example.github.io/). Enables canonical, Open Graph, and sitemap URLs.
  siteUrl: 'https://junwon.me/LatentDisturbance/',
  keywords: ['world models','robust optimization','latent disturbance','latent safety filter','policy steering','robot learning','uncertainty set','conformal prediction','safe robot manipulation'],
- resources: [{label:'arXiv',href:null},{label:'Code',href:'https://github.com/CMU-IntentLab/LatentDisturbance'}] as {label:string;href:string|null}[],
+ bibtex: `@article{seo2026modeling,
+  title   = {Modeling Latent Disturbances for Robust Decision-Making in World Models},
+  author  = {Seo, Junwon and Bajcsy, Andrea},
+  journal = {arXiv preprint arXiv:2610.07599},
+  year    = {2026}
+}`,
+ resources: [{label:'arXiv',href:'https://arxiv.org/abs/2610.07599'},{label:'Code',href:'https://github.com/CMU-IntentLab/LatentDisturbance'}] as {label:string;href:string|null}[],
  affiliations: 'Carnegie Mellon University',
  intro: 'Robust decision-making in the latent space of world models, by modeling latent-space disturbances.',
  takeaways: [
